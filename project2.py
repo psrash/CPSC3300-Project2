@@ -1,5 +1,9 @@
 import sys
 
+class Model:
+    def __init__(self, instruction):
+        self.instruction = instruction
+
 def readInFile(filename):
     in_file = open(filename, "rb")
     raw_data = in_file.read(4)
