@@ -4,6 +4,11 @@ class Model:
     def __init__(self, instruction):
         self.instruction = instruction
 
+def readRType(instruction):
+    #get operand
+    op = (instruction >> 26) & 0b111111
+    rs_register = (instruction >> 21) & 0b11111
+
 def readInFile(filename):
     in_file = open(filename, "rb")
     raw_data = in_file.read(4)
@@ -12,9 +17,11 @@ def readInFile(filename):
     for i in range(31, -1, -1):
         bit = (instruction >> i) & 1
         print(bit, end='')
+    print('\n')
 
     op = (instruction >> 26) & 0b111111
     print(f"The operand is: {op:06b}")
+    #check what operand it is and based on that process that instruction format
 
     rs_register = (instruction >> 21) & 0b11111
     print(f"The rs register is: {rs_register:05b}")
