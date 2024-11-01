@@ -6,8 +6,11 @@ class Model:
 
 def readRType(instruction):
     #get operand
-    op = (instruction >> 26) & 0b111111
-    rs_register = (instruction >> 21) & 0b11111
+    op = (instruction >> 26) & 0x3F
+    print(f"The operand is: {op:06b}")
+    rs_register = (instruction >> 21) & 0x1F
+    print(f"The rs register is: {rs_register:05b}")
+
 
 def readInFile(filename):
     in_file = open(filename, "rb")
@@ -18,6 +21,8 @@ def readInFile(filename):
         bit = (instruction >> i) & 1
         print(bit, end='')
     print('\n')
+
+    readRType(instruction)
 
     op = (instruction >> 26) & 0b111111
     print(f"The operand is: {op:06b}")
