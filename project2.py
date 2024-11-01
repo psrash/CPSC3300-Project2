@@ -8,8 +8,16 @@ def readRType(instruction):
     #get operand
     op = (instruction >> 26) & 0x3F
     print(f"The operand is: {op:06b}")
-    rs_register = (instruction >> 21) & 0x1F
-    print(f"The rs register is: {rs_register:05b}")
+    rs = (instruction >> 21) & 0x1F
+    print(f"The rs register is: {rs:05b}")
+    rt = (instruction >> 16) & 0x1F
+    print(f"the rt register is: {rt:05b}")
+    rd = (instruction >> 11) & 0x1F
+    print(f"the rd register is: {rd:05b}")
+    shamt = (instruction >> 6) & 0x1F
+    print(f"the shamt is: {shamt:05b}")
+    funct = instruction & 0x3F
+    print(f"the function is: {funct:06b}")
 
 
 def readInFile(filename):
@@ -22,14 +30,10 @@ def readInFile(filename):
         print(bit, end='')
     print('\n')
 
-    readRType(instruction)
-
     op = (instruction >> 26) & 0b111111
     print(f"The operand is: {op:06b}")
     #check what operand it is and based on that process that instruction format
-
-    rs_register = (instruction >> 21) & 0b11111
-    print(f"The rs register is: {rs_register:05b}")
+    readRType(instruction)
 
 def main():
     filename = sys.argv[1]
