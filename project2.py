@@ -53,15 +53,21 @@ def readRType(instruction):
     op = (instruction >> 26) & 0x3F
     print(f"The operand is: {op:06b}")
     rs = (instruction >> 21) & 0x1F
-    print(f"The rs register is: {rs:05b}")
+    print(f"The rs register is: {rs}")
     rt = (instruction >> 16) & 0x1F
-    print(f"the rt register is: {rt:05b}")
+    print(f"the rt register is: {rt}")
     rd = (instruction >> 11) & 0x1F
-    print(f"the rd register is: {rd:05b}")
+    print(f"the rd register is: {rd}")
     shamt = (instruction >> 6) & 0x1F
-    print(f"the shamt is: {shamt:05b}")
+    print(f"the shamt is: {shamt}")
     funct = instruction & 0x3F
-    print(f"the function is: {funct:06b}")
+    print(f"the function is: {funct}")
+
+def readIType(instruction):
+    op = (instruction >> 26) & 0x3F
+    rs = (instruction >> 21) & 0x1F
+    rt = (instruction >> 16) & 0x1F
+    immediate = instruction & 0xFFFF
 
 
 def readInFile(filename):
