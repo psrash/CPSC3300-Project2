@@ -69,6 +69,11 @@ def readIType(instruction):
     rt = (instruction >> 16) & 0x1F
     immediate = instruction & 0xFFFF
 
+def readJType(instruction):
+    op = (instruction >> 26) & 0x3F
+    address = instruction & 0x3FFFFFF
+
+
 
 def readInFile(filename):
     in_file = open(filename, "rb")
