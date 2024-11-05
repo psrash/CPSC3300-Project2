@@ -52,6 +52,7 @@ class CPU:
         self.cycles = 0  # track the number of cycles executed
 
     def readRType(self, instruction):
+        print("R type")
         #get operand
         op = (instruction >> 26) & 0x3F
         rs = (instruction >> 21) & 0x1F
@@ -80,6 +81,7 @@ class CPU:
 
 
     def readIType(self, instruction):
+        print("I Type")
         op = (instruction >> 26) & 0x3F
         rs = (instruction >> 21) & 0x1F
         rt = (instruction >> 16) & 0x1F
@@ -99,6 +101,7 @@ class CPU:
             pass
 
     def readJType(instruction):
+        print("J type")
         # Always going to be jump operand
         op = (instruction >> 26) & 0x3F
         address = instruction & 0x3FFFFFF
@@ -109,25 +112,28 @@ class Controller:
         self.cpu = cpu
         self.view = view
 
-    def readInFile(self, filename):
+    def read_file(self, filename):
         in_file = open(filename, "rb")
         raw_data = in_file.read(4)
-        instruction = int.from_bytes(raw_data, byteorder='big')
+        while raw_data:
+            instruction = int.from_bytes(raw_data, byteorder='big')
 
-        for i in range(31, -1, -1):
-            bit = (instruction >> i) & 1
-            print(bit, end='')
-        print('\n')
+            for i in range(31, -1, -1):
+                bit = (instruction >> i) & 1
+                print(bit, end='')
+            print('\n')
 
-        op = (instruction >> 26) & 0b111111
-        print(f"The operand is: {op:06b}")
-        # check what operand it is and based on that process that instruction format
-        if op == 0:
-            self.cpu.readRType(instruction)
-        elif op == 2:
-            self.cpu.readJType(instruction)
-        else:
-            self.cpu.readIType(instruction)
+            op = (instruction >> 26) & 0b111111
+            print(f"The operand is: {op:06b}")
+            # check what operand it is and based on that process that instruction format
+            if op == 0:
+                self.cpu.readRType(instruction)
+            elif op == 2:
+                self.cpu.readJType(instruction)
+            else:
+                self.cpu.readIType(instruction)
+            # read next line from file
+            raw_data = in_file.read(4)
 
     def run_program(self):
         # Logic to execute the instruction
@@ -149,7 +155,7 @@ def main():
     view = View(cpu)
     controller = Controller(cpu, view)
     filename = sys.argv[1]
-    controller.readInFile(filename)
+    controller.read_file(filename)
 
 if __name__ == "__main__":
     main()
