@@ -54,18 +54,30 @@ class CPU:
     def readRType(self, instruction):
         #get operand
         op = (instruction >> 26) & 0x3F
-        print(f"The operand is: {op:06b}")
         rs = (instruction >> 21) & 0x1F
-        print(f"The rs register is: {rs}")
         rt = (instruction >> 16) & 0x1F
-        print(f"the rt register is: {rt}")
         rd = (instruction >> 11) & 0x1F
-        print(f"the rd register is: {rd}")
         shamt = (instruction >> 6) & 0x1F
-        print(f"the shamt is: {shamt}")
         funct = instruction & 0x3F
-        print(f"the function is: {funct}")
         #TODO check what funct it is and proccess based on that
+        if funct == 32:
+            #TODO FUNCTION IS ADD
+            pass
+        elif funct == 34:
+            #TODO FUNCTION IS SUB
+            pass
+        elif funct == 36:
+            #TODO FUNCTION IS AND
+            pass
+        elif funct == 37:
+            #TODO FUNCTION IS OR
+            pass
+        elif funct == 42:
+            #TODO FUNCTION IS SLT
+            pass
+        else:
+            print("invalid function")
+
 
     def readIType(self, instruction):
         op = (instruction >> 26) & 0x3F
