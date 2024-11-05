@@ -85,11 +85,23 @@ class CPU:
         rt = (instruction >> 16) & 0x1F
         immediate = instruction & 0xFFFF
         #TODO check what op it is and proccess based on that
+        if op == 35:
+            #TODO OP IS LW
+            pass
+        elif op == 43:
+            #TODO OP IS SW
+            pass
+        elif op == 4:
+            #TODO OP IS BEQ
+            pass
+        elif op == 8:
+            #TODO OP IS ADDI
+            pass
 
     def readJType(instruction):
+        # Always going to be jump operand
         op = (instruction >> 26) & 0x3F
         address = instruction & 0x3FFFFFF
-        #TODO check what op it is and proccess based on that
 
 # Controller 
 class Controller:
@@ -112,7 +124,7 @@ class Controller:
         # check what operand it is and based on that process that instruction format
         if op == 0:
             self.cpu.readRType(instruction)
-        elif op == 35 or op == 43:
+        elif op == 2:
             self.cpu.readJType(instruction)
         else:
             self.cpu.readIType(instruction)
