@@ -21,6 +21,17 @@ class PC:
     def __init__(self):
         pass   
 
+class ALU:
+    def __init__(self):
+        # Track count of each ALU operation
+        self.operation_count = {
+            'add': 0,
+            'sub': 0,
+            'and': 0,
+            'or': 0,
+            'slt': 0,
+        }
+
 class CPU:
     def __init__(self):
         self.memory = Memory()  # store instructions and data
