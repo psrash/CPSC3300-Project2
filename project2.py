@@ -65,16 +65,19 @@ class CPU:
         print(f"the shamt is: {shamt}")
         funct = instruction & 0x3F
         print(f"the function is: {funct}")
+        #TODO check what funct it is and proccess based on that
 
     def readIType(self, instruction):
         op = (instruction >> 26) & 0x3F
         rs = (instruction >> 21) & 0x1F
         rt = (instruction >> 16) & 0x1F
         immediate = instruction & 0xFFFF
+        #TODO check what op it is and proccess based on that
 
     def readJType(instruction):
         op = (instruction >> 26) & 0x3F
         address = instruction & 0x3FFFFFF
+        #TODO check what op it is and proccess based on that
 
 # Controller 
 class Controller:
@@ -94,8 +97,13 @@ class Controller:
 
         op = (instruction >> 26) & 0b111111
         print(f"The operand is: {op:06b}")
-        #check what operand it is and based on that process that instruction format
-        self.cpu.readRType(instruction)
+        # check what operand it is and based on that process that instruction format
+        if op == 0:
+            self.cpu.readRType(instruction)
+        elif op == 35 or op == 43:
+            self.cpu.readJType(instruction)
+        else:
+            self.cpu.readIType(instruction)
 
     def run_program(self):
         # Logic to execute the instruction
