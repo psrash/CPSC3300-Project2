@@ -4,8 +4,10 @@ import sys
 class Memory:
     def __init__(self):
         self.memory = {}
+        self.read_count = 0
+        self.write_count = 0
 
-    def read():
+    def read(self):
         pass
     
     def write():
@@ -25,15 +27,64 @@ class CPU:
         self.registers = Register()  # hold data
         self.program_counter = 0  # current instruction address
         self.instruction_count = {
-            'add': 0, # Extend with other instructions as needed
+            'add': 0,
+            'addi': 0,
+            'sub': 0,
+            'and': 0,
+            'or': 0,
+            'slt': 0,
+            'beq': 0,
+            'j': 0,
+            'lw': 0,
+            'sw': 0
         }
         self.cycles = 0  # track the number of cycles executed
+
+    def readRType(self, instruction):
+        #get operand
+        op = (instruction >> 26) & 0x3F
+        print(f"The operand is: {op:06b}")
+        rs = (instruction >> 21) & 0x1F
+        print(f"The rs register is: {rs}")
+        rt = (instruction >> 16) & 0x1F
+        print(f"the rt register is: {rt}")
+        rd = (instruction >> 11) & 0x1F
+        print(f"the rd register is: {rd}")
+        shamt = (instruction >> 6) & 0x1F
+        print(f"the shamt is: {shamt}")
+        funct = instruction & 0x3F
+        print(f"the function is: {funct}")
+
+    def readIType(self, instruction):
+        op = (instruction >> 26) & 0x3F
+        rs = (instruction >> 21) & 0x1F
+        rt = (instruction >> 16) & 0x1F
+        immediate = instruction & 0xFFFF
+
+    def readJType(instruction):
+        op = (instruction >> 26) & 0x3F
+        address = instruction & 0x3FFFFFF
 
 # Controller 
 class Controller:
     def __init__(self, cpu, view):
         self.cpu = cpu
         self.view = view
+
+    def readInFile(self, filename):
+        in_file = open(filename, "rb")
+        raw_data = in_file.read(4)
+        instruction = int.from_bytes(raw_data, byteorder='big')
+
+        for i in range(31, -1, -1):
+            bit = (instruction >> i) & 1
+            print(bit, end='')
+        print('\n')
+
+        op = (instruction >> 26) & 0b111111
+        print(f"The operand is: {op:06b}")
+        #check what operand it is and based on that process that instruction format
+        self.cpu.readRType(instruction)
 
     def run_program(self):
         # Logic to execute the instruction
@@ -42,57 +93,20 @@ class Controller:
 
 # View
 class View:
-    def __init__(self, cpu_model):
-        self.cpu = cpu_model
+    def __init__(self, cpu):
+        self.cpu = cpu
 
     def output(self):
         pass
 
-def readRType(instruction):
-    #get operand
-    op = (instruction >> 26) & 0x3F
-    print(f"The operand is: {op:06b}")
-    rs = (instruction >> 21) & 0x1F
-    print(f"The rs register is: {rs}")
-    rt = (instruction >> 16) & 0x1F
-    print(f"the rt register is: {rt}")
-    rd = (instruction >> 11) & 0x1F
-    print(f"the rd register is: {rd}")
-    shamt = (instruction >> 6) & 0x1F
-    print(f"the shamt is: {shamt}")
-    funct = instruction & 0x3F
-    print(f"the function is: {funct}")
 
-def readIType(instruction):
-    op = (instruction >> 26) & 0x3F
-    rs = (instruction >> 21) & 0x1F
-    rt = (instruction >> 16) & 0x1F
-    immediate = instruction & 0xFFFF
-
-def readJType(instruction):
-    op = (instruction >> 26) & 0x3F
-    address = instruction & 0x3FFFFFF
-
-
-
-def readInFile(filename):
-    in_file = open(filename, "rb")
-    raw_data = in_file.read(4)
-    instruction = int.from_bytes(raw_data, byteorder='big')
-
-    for i in range(31, -1, -1):
-        bit = (instruction >> i) & 1
-        print(bit, end='')
-    print('\n')
-
-    op = (instruction >> 26) & 0b111111
-    print(f"The operand is: {op:06b}")
-    #check what operand it is and based on that process that instruction format
-    readRType(instruction)
 
 def main():
+    cpu = CPU()
+    view = View(cpu)
+    controller = Controller(cpu, view)
     filename = sys.argv[1]
-    readInFile(filename)
+    controller.readInFile(filename)
 
 if __name__ == "__main__":
     main()
