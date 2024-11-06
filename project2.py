@@ -19,6 +19,12 @@ class Register:
     def __init__(self):
         self.register = [0] * 32 # just to initialize
 
+    def store_binary(self, instruction):
+        # Convert instruction to binary and store each bit
+        for i in range(31, -1, -1):
+            bit = (instruction >> i) & 1
+            self.register[31 - i] = bit  # Store in reverse order (MSB to LSB)
+
 class PC:
     def __init__(self):
         self.value = 0
@@ -62,6 +68,10 @@ class CPU:
 
     def readRType(self, instruction):
         print("R type")
+
+        # Store instruction bits into registers
+        self.registers.store_binary(instruction)
+        
         #get operand
         op = (instruction >> 26) & 0x3F
         rs = (instruction >> 21) & 0x1F
@@ -91,17 +101,20 @@ class CPU:
 
     def readIType(self, instruction):
         print("I Type")
+
+        # Store instruction bits in register
+        self.registers.store_binary(instruction)
+
         op = (instruction >> 26) & 0x3F
         rs = (instruction >> 21) & 0x1F
         rt = (instruction >> 16) & 0x1F
         immediate = instruction & 0xFFFF
         #TODO check what op it is and proccess based on that
         if op == 4:
-            if self.registers.register[rs] == self.registers.register[rt]:
-                self.instruction_count['beq'] += 1
-                offset = immediate << 2
-                print (offset)
-                self.program_counter.set_address(self.program_counter.value + offset)
+            self.instruction_count['beq'] += 1
+            offset = immediate << 2
+            print (offset)
+            self.program_counter.set_address(self.program_counter.value + offset) # BEQ instruction so PC is weird calculation
         elif op == 8:
             self.instruction_count['addi'] += 1
         elif op == 35:
@@ -109,8 +122,12 @@ class CPU:
         elif op == 43:
             self.instruction_count['sw'] += 1
 
-    def readJType(instruction):
+    def readJType(self, instruction):
         print("J type")
+
+        # Store instruction bits in register
+        self.registers.store_binary(instruction)
+
         # Always going to be jump operand
         op = (instruction >> 26) & 0x3F
         address = instruction & 0x3FFFFFF
@@ -143,7 +160,7 @@ class Controller:
 
 
     def run_program(self):
-        while self.cpu.program_counter.value in self.cpu.memory.memory:
+        while self.cpu.program_counter.value in self.cpu.memory.memory:  # Stop if PC exceeds stored instructions
             # Fetch the instruction from memory at the address pointed to by the program counter
             address = self.cpu.program_counter.value
             instruction = self.cpu.memory.read(address)  # Fetch the instruction
