@@ -1,0 +1,12 @@
+CPSC3300 project 2
+Sam Crooks
+Phoenix Rash
+
+We wrote our program in python and used the Model View Controller design pattern.
+We have Model classes that include the Memory, Register, PC, etc. classes. These
+classes are the classes that actually store and manipulate the data from the 
+instruction set. The view class contains the functions to output the data
+to the terminal. The Controller class contains the functions that run the actual
+program and handle the flow of the program. We first read in the instrucitons one line at a time and then check what operand it is. based on what operand it is we
+process it accordingly, adding data to memory, changing registers, program counter,
+etc. After each instruction is read and proccesed, the data is output to the terminal using the view class.
