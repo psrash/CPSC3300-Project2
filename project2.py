@@ -67,37 +67,30 @@ class CPU:
         self.cycles = 1  # track the number of cycles executed
 
     def readRType(self, instruction):
-        print("R type")
-
         # Store instruction bits into registers
         self.registers.store_binary(instruction)
         
-        #get operand
-        op = (instruction >> 26) & 0x3F
-        rs = (instruction >> 21) & 0x1F
-        rt = (instruction >> 16) & 0x1F
-        rd = (instruction >> 11) & 0x1F
-        shamt = (instruction >> 6) & 0x1F
         funct = instruction & 0x3F
-        #TODO check what funct it is and proccess based on that
+
+        # Check what operation it is and proccess based on that
         if funct == 32:
-            print("add operation")
+            print("ADD operation")
             self.alu.operation_count['add'] += 1
             self.instruction_count['add'] += 1
         elif funct == 34:
-            print("sub operation")
+            print("SUB operation")
             self.alu.operation_count['sub'] += 1
             self.instruction_count['sub'] += 1
         elif funct == 36:
-            print("and operation")
+            print("AND operation")
             self.alu.operation_count['and'] += 1
             self.instruction_count['and'] += 1
         elif funct == 37:
-            print("or operation")
+            print("OR operation")
             self.alu.operation_count['or'] += 1
             self.instruction_count['or'] += 1
         elif funct == 42:
-            print("slt operation")
+            print("SLT operation")
             self.alu.operation_count['slt'] += 1
             self.instruction_count['slt'] += 1
         else:
@@ -105,42 +98,31 @@ class CPU:
 
 
     def readIType(self, instruction):
-        print("I Type")
-
         # Store instruction bits in register
         self.registers.store_binary(instruction)
 
         op = (instruction >> 26) & 0x3F
-        rs = (instruction >> 21) & 0x1F
-        rt = (instruction >> 16) & 0x1F
         immediate = instruction & 0xFFFF
-        #TODO check what op it is and proccess based on that
+        
+        # Check what op it is and proccess based on that
         if op == 4:
-            print("beq operation")
+            print("BEQ operation")
             self.instruction_count['beq'] += 1
             offset = immediate << 2
-            print (offset)
             self.program_counter.set_address(self.program_counter.value + offset) # BEQ instruction so PC is weird calculation
         elif op == 8:
-            print("addi operation")
+            print("ADDI operation")
             self.instruction_count['addi'] += 1
         elif op == 35:
-            print("lw operation")
+            print("LW operation")
             self.instruction_count['lw'] += 1
         elif op == 43:
-            print("sw operation")
+            print("SW operation")
             self.instruction_count['sw'] += 1
 
     def readJType(self, instruction):
-        print("J type")
-        print("j operation")
-
         # Store instruction bits in register
         self.registers.store_binary(instruction)
-
-        # Always going to be jump operand
-        op = (instruction >> 26) & 0x3F
-        address = instruction & 0x3FFFFFF
 
 # Controller 
 class Controller:
@@ -157,12 +139,6 @@ class Controller:
             
             # Store the instruction in memory at the current address
             self.cpu.memory.write(address, instruction)
-            
-            # Print the instruction as binary
-            for i in range(31, -1, -1):
-                bit = (instruction >> i) & 1
-                print(bit, end='')
-            print('\n')
             
             # Increment address by 4 for next instruction
             address += 4
@@ -203,13 +179,16 @@ class View:
         self.cpu = cpu
 
     def output(self):
-        print("PC:", self.cpu.program_counter.value)
-        print("Registers:", self.cpu.registers.register)
-        print("Memory Accesses: Reads:", self.cpu.memory.read_count, "Writes:", self.cpu.memory.write_count)
-        print("Instruction Counts:", self.cpu.instruction_count)
-        print("ALU Operations:", self.cpu.alu.operation_count)
-        print("Cycles:", self.cpu.cycles)
-        print("----------------------------------------------------------------------------")
+        print("\n" + "="*130)
+        print(" CPU METRICS ".center(130))
+        print("="*130)
+        print(f"{'Program Counter (PC)':<30}: {self.cpu.program_counter.value}")
+        print(f"{'Registers':<30}: {self.cpu.registers.register}")
+        print(f"{'Memory Accesses':<30}: Reads: {self.cpu.memory.read_count}, Writes: {self.cpu.memory.write_count}")
+        print(f"{'Instruction Count':<30}: {self.cpu.instruction_count}")
+        print(f"{'ALU Operations':<30}: {self.cpu.alu.operation_count}")
+        print(f"{'Cycles':<30}: {self.cpu.cycles}")
+        print("-" * 130 + "\n")
 
 
 
