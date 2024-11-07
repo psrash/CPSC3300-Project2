@@ -2,6 +2,7 @@ CPSC3300 project 2
 Sam Crooks
 Phoenix Rash
 
+ABOUT:
 We wrote our program in python and used the Model View Controller design pattern.
 We have Model classes that include the Memory, Register, PC, etc. classes. These
 classes are the classes that actually store and manipulate the data from the 
@@ -13,3 +14,6 @@ etc. After each instruction is read and proccesed, the data is output to the ter
 
 INSTRUCTIONS FOR RUNNING:
 make run FILE=<name of input file>
+
+Notes:
+The output.dat file that we have was our sample file for testing. It contains a simple 4-lines of different MIPS instructions.
