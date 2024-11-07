@@ -10,3 +10,6 @@ to the terminal. The Controller class contains the functions that run the actual
 program and handle the flow of the program. We first read in the instrucitons one line at a time and then check what operand it is. based on what operand it is we
 process it accordingly, adding data to memory, changing registers, program counter,
 etc. After each instruction is read and proccesed, the data is output to the terminal using the view class.
+
+INSTRUCTIONS FOR RUNNING:
+make run FILE=<name of input file>
