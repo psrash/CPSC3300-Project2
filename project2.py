@@ -81,18 +81,23 @@ class CPU:
         funct = instruction & 0x3F
         #TODO check what funct it is and proccess based on that
         if funct == 32:
+            print("add operation")
             self.alu.operation_count['add'] += 1
             self.instruction_count['add'] += 1
         elif funct == 34:
+            print("sub operation")
             self.alu.operation_count['sub'] += 1
             self.instruction_count['sub'] += 1
         elif funct == 36:
+            print("and operation")
             self.alu.operation_count['and'] += 1
             self.instruction_count['and'] += 1
         elif funct == 37:
+            print("or operation")
             self.alu.operation_count['or'] += 1
             self.instruction_count['or'] += 1
         elif funct == 42:
+            print("slt operation")
             self.alu.operation_count['slt'] += 1
             self.instruction_count['slt'] += 1
         else:
@@ -111,19 +116,24 @@ class CPU:
         immediate = instruction & 0xFFFF
         #TODO check what op it is and proccess based on that
         if op == 4:
+            print("beq operation")
             self.instruction_count['beq'] += 1
             offset = immediate << 2
             print (offset)
             self.program_counter.set_address(self.program_counter.value + offset) # BEQ instruction so PC is weird calculation
         elif op == 8:
+            print("addi operation")
             self.instruction_count['addi'] += 1
         elif op == 35:
+            print("lw operation")
             self.instruction_count['lw'] += 1
         elif op == 43:
+            print("sw operation")
             self.instruction_count['sw'] += 1
 
     def readJType(self, instruction):
         print("J type")
+        print("j operation")
 
         # Store instruction bits in register
         self.registers.store_binary(instruction)
